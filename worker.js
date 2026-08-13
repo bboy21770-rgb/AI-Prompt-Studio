@@ -78,31 +78,111 @@ h1{font-size:clamp(38px,7vw,72px);line-height:.98;text-align:center;margin:28px 
 <script>
 const $=id=>document.getElementById(id);
 let type="Video";
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");type=b.dataset.type});
+
+document.querySelectorAll(".tab").forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll(".tab").forEach(function(x){
+      x.classList.remove("active");
+    });
+    b.classList.add("active");
+    type=b.dataset.type;
+  };
+});
 
 function generate(){
- const idea=$("idea").value.trim();
- if(!idea){$("idea").focus();$("idea").placeholder="Write your idea first…";return}
- const style=$("style").value,tool=$("tool").value,format=$("format").value,niche=$("niche").value;
- let prompt;
+  const idea=$("idea").value.trim();
 
-if(type==="Video") prompt="Create a "+style.toLowerCase()+" "+format+" video for "+tool+".\n\nSCENE: "+idea+"\n\nDIRECTOR'S BRIEF:\n• Niche: "+niche+"\n• Strong visual storytelling with a clear beginning, middle and payoff.\n• Natural realistic motion, believable physics and expressive subjects.\n• Cinematic composition, intentional camera movement, detailed environment and professional lighting.\n• Keep the main subject consistent from start to finish.\n• Add subtle atmospheric details and depth without distracting from the subject.\n• No text overlays, logos, watermarks or unwanted artifacts.\n\nCAMERA: Establishing shot → medium detail → dynamic close-up → satisfying final frame.\nAUDIO: Natural ambience and subtle cinematic sound design.\nOUTPUT: "+format+". High detail, polished, production-ready.";
+  if(!idea){
+    $("idea").focus();
+    $("idea").placeholder="Write your idea first…";
+    return;
+  }
 
-else if(type==="Image") prompt="Create a "+style.toLowerCase()+" image using "+tool+".\n\nCONCEPT: "+idea+"\n\nVISUAL DIRECTION:\n• Niche: "+niche+"\n• Strong focal subject and clear visual hierarchy.\n• Detailed environment, realistic materials and natural lighting.\n• Professional composition, depth, texture and atmosphere.\n• Authentic expressions and believable proportions.\n• Clean background separation and visually memorable storytelling.\n• No text, watermark, logo, distorted anatomy or unwanted objects.\n\nFORMAT: "+format+". Premium editorial quality, highly detailed, polished and coherent.";
+  const style=$("style").value;
+  const tool=$("tool").value;
+  const format=$("format").value;
+  const niche=$("niche").value;
+  let prompt="";
 
-else if(type==="Story") prompt="Write a compelling "+niche.toLowerCase()+" story based on this idea:\n\n"+idea+"\n\nSTYLE: "+style+"\nFORMAT: "+format+"\n\nStructure it with a strong opening hook, escalating conflict, emotional or informative middle, and a satisfying ending. Use vivid but concise details, natural dialogue where useful, consistent characters and a memorable final line. Make it original and easy to adapt into short-form content.";
+  if(type==="Video"){
+    prompt="Create a "+style.toLowerCase()+" "+format+" video for "+tool+".\n\n"+
+    "SCENE: "+idea+"\n\n"+
+    "DIRECTOR'S BRIEF:\n"+
+    "• Niche: "+niche+"\n"+
+    "• Strong visual storytelling with a clear beginning, middle and payoff.\n"+
+    "• Natural realistic motion, believable physics and expressive subjects.\n"+
+    "• Cinematic composition, intentional camera movement, detailed environment and professional lighting.\n"+
+    "• Keep the main subject consistent from start to finish.\n"+
+    "• Add subtle atmospheric details and depth without distracting from the subject.\n"+
+    "• No text overlays, logos, watermarks or unwanted artifacts.\n\n"+
+    "CAMERA: Establishing shot → medium detail → dynamic close-up → satisfying final frame.\n"+
+    "AUDIO: Natural ambience and subtle cinematic sound design.\n"+
+    "OUTPUT: "+format+". High detail, polished, production-ready.";
+  }
+  else if(type==="Image"){
+    prompt="Create a "+style.toLowerCase()+" image using "+tool+".\n\n"+
+    "CONCEPT: "+idea+"\n\n"+
+    "VISUAL DIRECTION:\n"+
+    "• Niche: "+niche+"\n"+
+    "• Strong focal subject and clear visual hierarchy.\n"+
+    "• Detailed environment, realistic materials and natural lighting.\n"+
+    "• Professional composition, depth, texture and atmosphere.\n"+
+    "• Authentic expressions and believable proportions.\n"+
+    "• Clean background separation and visually memorable storytelling.\n"+
+    "• No text, watermark, logo, distorted anatomy or unwanted objects.\n\n"+
+    "FORMAT: "+format+". Premium editorial quality, highly detailed, polished and coherent.";
+  }
+  else if(type==="Story"){
+    prompt="Write a compelling "+niche.toLowerCase()+" story based on this idea:\n\n"+
+    idea+"\n\n"+
+    "STYLE: "+style+"\n"+
+    "FORMAT: "+format+"\n\n"+
+    "Structure it with a strong opening hook, escalating conflict, emotional or informative middle, and a satisfying ending. Use vivid but concise details, natural dialogue where useful, consistent characters and a memorable final line. Make it original and easy to adapt into short-form content.";
+  }
+  else{
+    prompt="Create a high-retention "+niche.toLowerCase()+" social post around:\n\n"+
+    idea+"\n\n"+
+    "PLATFORM: "+tool+"\n"+
+    "STYLE: "+style+"\n"+
+    "FORMAT: "+format+"\n\n"+
+    "Deliver:\n"+
+    "1. 3 scroll-stopping hooks\n"+
+    "2. 3 strong titles\n"+
+    "3. 1 concise caption with a clear call-to-action\n"+
+    "4. 10 relevant hashtags\n"+
+    "5. One short thumbnail/cover text idea\n\n"+
+    "Keep the language natural, punchy, audience-focused and non-clickbait.";
+  }
 
-else prompt="Create a high-retention "+niche.toLowerCase()+" social post around:\n\n"+idea+"\n\nPLATFORM: "+tool+"\nSTYLE: "+style+"\nFORMAT: "+format+"\n\nDeliver:\n1. 3 scroll-stopping hooks\n2. 3 strong titles\n3. 1 concise caption with a clear call-to-action\n4. 10 relevant hashtags\n5. One short thumbnail/cover text idea\n\nKeep the language natural, punchy, audience-focused and non-clickbait.";
+  $("resultTitle").textContent=type+" prompt ready";
+  $("output").textContent=prompt;
 
-$("resultTitle").textContent=type+" prompt ready";
-$("output").textContent=prompt;
-$("chips").innerHTML=[style,tool,format,niche].map(function(x){return "<span class='chip'>"+x+"</span>";}).join("");
- $("result").classList.add("show");
- $("result").scrollIntoView({behavior:"smooth",block:"nearest"});
+  $("chips").innerHTML=[style,tool,format,niche]
+    .map(function(x){
+      return '<span class="chip">'+x+'</span>';
+    }).join("");
+
+  $("result").classList.add("show");
+  $("result").scrollIntoView({behavior:"smooth"});
 }
+
 $("generate").onclick=generate;
-$("clear").onclick=()=>{$("idea").value="";$("result").classList.remove("show");$("idea").focus()};
-$("copy").onclick=async()=>{try{await navigator.clipboard.writeText($("output").textContent);$("copy").textContent="Copied ✓";setTimeout(()=>$("copy").textContent="Copy",1400)}catch(e){alert("Copy failed — select the text manually.")}};
+
+$("clear").onclick=function(){
+  $("idea").value="";
+  $("output").textContent="";
+  $("result").classList.remove("show");
+};
+
+$("copy").onclick=async function(){
+  try{
+    await navigator.clipboard.writeText($("output").textContent);
+    this.textContent="Copied!";
+    setTimeout(()=>this.textContent="Copy",1200);
+  }catch(e){
+    alert("Copy failed. Please copy the prompt manually.");
+  }
+};
 </script>
 </body>
 </html>`;
