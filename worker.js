@@ -96,7 +96,7 @@ else prompt="Create a high-retention "+niche.toLowerCase()+" social post around:
 
 $("resultTitle").textContent=type+" prompt ready";
 $("output").textContent=prompt;
- $("chips").innerHTML=[style,tool,format,niche].map(x=>`<span class="chip">${x}</span>`).join("");
+$("chips").innerHTML=[style,tool,format,niche].map(function(x){return "<span class='chip'>"+x+"</span>";}).join("");
  $("result").classList.add("show");
  $("result").scrollIntoView({behavior:"smooth",block:"nearest"});
 }
