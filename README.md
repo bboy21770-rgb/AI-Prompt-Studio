@@ -9,3 +9,4 @@ A lightweight Cloudflare Worker website with no build step.
 - Production branch: `main`
 
 The app is a client-side prompt studio: Video, Image, Story and Social modes, with style/tool/format/niche controls and a copy button.
+Deployment update
